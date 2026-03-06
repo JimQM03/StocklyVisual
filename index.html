@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FerreControl - Sistema de Gestión</title>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+
+    <!-- Sidebar de navegación -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🛠 FerreControl</h2>
+        </div>
+        <nav class="nav-menu">
+            <li class="nav-item active" data-view="view-dashboard">📊 Dashboard</li>
+            <li class="nav-item" data-view="view-inventario" id="menu-inventario">
+                <span>📦 Inventario</span>
+                <i class="arrow-icon">▼</i>
+            </li>
+            <div class="sub-menu" id="sub-inventario">
+                <li class="nav-item sub-item" data-view="view-inventario">📦 Ver Todo</li>
+                <li class="nav-item sub-item" data-view="view-tubos">🚰 Sección Tubos</li>
+            </div>
+            <li class="nav-item" data-view="view-facturacion">🧾 Facturación</li>
+            <li class="nav-item" data-view="view-proveedores">🤝 Proveedores</li>
+            <li class="nav-item" data-view="view-reportes">📈 Reportes</li>
+            <li class="nav-item" data-view="view-cartera">📓 Cartera</li>
+            <li class="nav-item" data-view="view-ahorros">💰 Fondo de Ahorro</li>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="btn-action btn-danger" onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <!-- Header con título y usuario -->
+        <header class="header-main">
+            <div>
+                <h1 id="seccion-titulo">Dashboard</h1>
+                <p id="loginTime" class="text-small"></p>
+            </div>
+            <div class="user-pill">
+                👤 <span id="userName">Cargando...</span>
+            </div>
+        </header>
+
+        <!-- ==================== VISTA: DASHBOARD ==================== -->
+        <div id="view-dashboard" class="content-view active-view">
+            <div class="dashboard-grid">
+                <!-- Tabla de inventario -->
+                <section class="card">
+                    <div class="card-header-flex">
+                        <h3>📦 Inventario y Precios</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Ref</th>
+                                    <th>Artículo</th>
+                                    <th>Venta</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTable"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Panel de nueva venta (VERSIÓN ÚNICA) -->
+                <div class="right-column">
+                    <section class="card">
+                        <h3>🧾 Nueva Venta</h3>
+                        
+                        <!-- ===== SECCIÓN DE CLIENTES ===== -->
+                        <div class="form-group">
+                            <label>Tipo de Venta</label>
+                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                <label style="flex: 1; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                                    <input type="radio" name="tipoVenta" value="contado" checked onchange="toggleCamposCliente()">
+                                    💵 Contado (Persona Natural)
+                                </label>
+                                <label style="flex: 1; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                                    <input type="radio" name="tipoVenta" value="credito" onchange="toggleCamposCliente()">
+                                    📓 Crédito (Empresarial)
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Campos para venta a CRÉDITO -->
+                        <div id="camposCredito" style="display: none;">
+                            <div class="form-group">
+                                <label>Seleccionar Cliente (Empresa)</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <select id="selectClienteVenta" class="form-control" style="flex: 1;">
+                                        <option value="">-- Seleccione un cliente --</option>
+                                    </select>
+                                    <button type="button" class="btn-action btn-new" onclick="abrirModalCliente(event)" style="width: auto; padding: 10px 15px;">
+                                        ➕ Nuevo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Campos para venta a CONTADO -->
+                        <div id="camposContado">
+                            <div class="form-group">
+                                <label>Identificación / Nombre del Cliente</label>
+                                <input type="text" id="clienteIdentificacion" class="form-control" placeholder="Ej: 123456789 o Juan Pérez">
+                                <small style="color: var(--color-text-secondary);">Este valor se usará como nombre en la factura</small>
+                            </div>
+                        </div>
+
+                        <hr class="divider">
+                        <!-- ===== FIN SECCIÓN CLIENTES ===== -->
+                        
+                        <!-- Agregar productos -->
+                        <div class="add-product-box">
+                            <label>Agregar Producto</label>
+                            <div class="input-group-flex">
+                                <select id="selectProducto" class="form-control"></select>
+                                <input type="number" id="cantProducto" class="form-control" value="1" min="1">
+                                <button class="btn-add-cart" onclick="agregarAlCarrito(parseInt(document.getElementById('selectProducto').value))">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Carrito de compras -->
+                        <div class="cart-container">
+                            <table class="table-cart">
+                                <thead>
+                                    <tr>
+                                        <th>Prod.</th>
+                                        <th>Cant.</th>
+                                        <th>Subt.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cartTableBody"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- Total y método de pago -->
+                        <div class="price-box">
+                            <span>Total a Pagar:</span> 
+                            <strong id="totalFactura">$0.00</strong>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label>Método de Pago</label>
+                            <select id="metodoPago" class="form-control" onchange="toggleFechaCartera()">
+                                <option value="Efectivo">💵 Efectivo / Transferencia</option>
+                                <option value="Credito">📓 Crédito (A Cartera)</option>
+                            </select>
+                        </div>
+
+                        <!-- Fecha de vencimiento (solo para crédito) -->
+                        <div id="group-vencimiento" class="form-group" style="display: none;">
+                            <label style="color: var(--color-error);">📅 Fecha Límite de Pago</label>
+                            <input type="date" id="fechaVencimiento" class="form-control">
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="action-buttons-flex">
+                            <button class="btn-action btn-success" onclick="procesarVenta()">✅ Finalizar</button>
+                            <button class="btn-action btn-outline" onclick="limpiarCarrito()">🗑️ Vaciar</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VISTA: INVENTARIO GENERAL ==================== -->
+        <div id="view-inventario" class="content-view">
+            <!-- Header con búsqueda y acciones -->
+            <div class="inventory-header-actions">
+                <div class="search-group">
+                    <label class="search-label">BÚSQUEDA RÁPIDA</label>
+                    <input type="text" id="searchInventory" class="form-control" placeholder="🔍 Buscar por nombre, ref o categoría...">
+                </div>
+                
+                <div class="actions-group">
+                    <div class="filter-item">
+                        <label class="filter-label">CATEGORÍA</label>
+                        <select id="filterCategory" class="form-control">
+                            <option value="all">Todas</option>
+                            <!-- Las opciones se llenarán dinámicamente -->
+                        </select>
+                    </div>
+                    <button class="btn-action btn-export" onclick="exportarInventarioExcel()">📥 Exportar Reporte</button>
+                    <button class="btn-action btn-new" onclick="abrirModalProducto('general', event)">+ Nuevo Producto</button>
+                </div>
+            </div>
+
+            <!-- Tabla de inventario completo -->
+            <section class="card table-card">
+                <div class="table-responsive">
+                    <table class="table-detailed">
+                        <thead>
+                            <tr>
+                                <th>Ref</th>
+                                <th>Artículo / Descripción</th>
+                                <th>Categoría</th>
+                                <th>Proveedor</th>
+                                <th>Ubicación</th>
+                                <th>Costo</th>
+                                <th>Venta</th>
+                                <th>Stock</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fullInventoryTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== VISTA: INVENTARIO DE TUBOS ==================== -->
+        <div id="view-tubos" class="content-view">
+            <header class="section-header">
+                <h2>🚰 Inventario Especializado de Tubos</h2>
+                <p class="text-small">Gestión independiente de tubería técnica: PVC, CPVC, Galvanizado</p>
+            </header>
+
+            <!-- Header con búsqueda específica para tubos -->
+            <div class="inventory-header-actions">
+                <div class="search-group">
+                    <label class="search-label">BÚSQUEDA DE TUBOS</label>
+                    <input type="text" id="searchTubos" class="form-control" placeholder="🔍 Buscar tubo por nombre, ref o material...">
+                </div>
+                
+                <div class="actions-group">
+                    <div class="filter-item">
+                        <label class="filter-label">MATERIAL</label>
+                        <select id="filterTuboType" class="form-control">
+                            <option value="all">Todos los materiales</option>
+                            <option value="PVC">PVC</option>
+                            <option value="CPVC">CPVC</option>
+                            <option value="Galvanizado">Galvanizado</option>
+                            <option value="Acero">Acero</option>
+                            <option value="Acero Inoxidable">Acero Inoxidable</option>
+                            <option value="Cobre">Cobre</option>
+                            <option value="Polietileno">Polietileno</option>
+                            <option value="PPR">PPR</option>
+                            <option value="PEX">PEX</option>
+                            <option value="Hierro Fundido">Hierro Fundido</option>
+                        </select>
+                    </div>
+                    <button class="btn-action btn-export" onclick="exportarTubosExcel()">📥 Exportar Tubos</button>
+                    <button class="btn-action btn-new" onclick="abrirModalProducto('tubos', event)">+ Nuevo Tubo</button>
+                </div>
+            </div>
+
+            <!-- Tabla específica para tubos -->
+            <section class="card table-card">
+                <div class="table-responsive">
+                    <table class="table-detailed">
+                        <thead>
+                            <tr>
+                                <th>Ref</th>
+                                <th>Nombre / Descripción</th>
+                                <th>Material</th>
+                                <th>Diámetro</th>
+                                <th>Longitud</th>
+                                <th>Presión</th>
+                                <th>Proveedor</th>
+                                <th>Ubicación</th>
+                                <th>Costo / Venta</th>
+                                <th>Stock</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tubosTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== VISTA: FACTURACIÓN ==================== -->
+        <div id="view-facturacion" class="content-view">
+            <!-- ✅ Barra de filtros -->
+            <div class="inventory-header-actions" style="margin-bottom: 1.5rem;">
+                <div class="search-group">
+                    <label class="search-label">🔍 BUSCAR FACTURA</label>
+                    <input type="text" id="searchFacturas" class="form-control" 
+                        placeholder="Buscar por # factura o nombre del cliente...">
+                </div>
+                
+                <div class="actions-group">
+                    <div class="filter-item">
+                        <label class="filter-label">📅 DESDE</label>
+                        <input type="date" id="filterFechaInicio" class="form-control">
+                    </div>
+                    <div class="filter-item">
+                        <label class="filter-label">📅 HASTA</label>
+                        <input type="date" id="filterFechaFin" class="form-control">
+                    </div>
+                    <div class="filter-item">
+                        <label class="filter-label">💳 MÉTODO</label>
+                        <select id="filterMetodoPago" class="form-control">
+                            <option value="todos">Todos</option>
+                            <option value="Efectivo">💵 Efectivo</option>
+                            <option value="Credito">📓 Crédito</option>
+                        </select>
+                    </div>
+                    <button class="btn-action btn-outline" id="btnLimpiarFiltrosFacturas" 
+                            style="width: auto; padding: 10px 20px;">
+                        🧹 Limpiar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabla de facturas -->
+            <section class="card">
+                <h3>Historial de Transacciones</h3>
+                
+                <!-- ✅ NUEVO: Total de ventas (visible) -->
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+                    <div class="card stats-card" style="width: auto; min-width: 250px; padding: 10px 20px; background: var(--color-bg-tertiary);">
+                        <span class="text-small" style="color: var(--color-text-secondary);">💰 TOTAL VENTAS</span>
+                        <h2 id="total-facturado" style="color: var(--color-success); font-size: 1.8rem; margin: 0;">$0</h2>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table-detailed">
+                        <thead>
+                            <tr>
+                                <th>ID Factura</th>
+                                <th>Fecha</th>
+                                <th>Cliente</th>
+                                <th>Total Venta</th>
+                                <th>Costo Mercancía</th>
+                                <th>Ganancia</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historialFacturas"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== VISTA: PROVEEDORES ==================== -->
+        <div id="view-proveedores" class="content-view">
+            <header class="section-header">
+                <div>
+                    <h2>🤝 Directorio de Proveedores</h2>
+                    <p class="text-small">Gestiona tus contactos y fuentes de abastecimiento</p>
+                </div>
+                <button class="btn-action btn-new" onclick="abrirModalProveedor(null, event)">+ Nuevo Proveedor</button>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- Tabla de proveedores -->
+                <section class="card">
+                    <div class="table-responsive">
+                        <table class="table-standard">
+                            <thead>
+                                <tr>
+                                    <th>Empresa / Comercial</th>
+                                    <th>Contacto Directo</th>
+                                    <th>Precios y Rating</th>
+                                    <th>Categoría</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="suppliersTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Panel de mejores precios -->
+                <div class="right-column">
+                    <section class="card">
+                        <h3>🤝 Mejores Precios</h3>
+                        <p class="text-small">Comparativa de proveedores por producto</p>
+                        <div id="supplierList" class="supplier-list"></div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VISTA: REPORTES ==================== -->
+        <div id="view-reportes" class="content-view">
+            <header class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2>📈 Reportes y Análisis de Negocio</h2>
+                    <p class="text-small">Historial de ventas y rentabilidad</p>
+                </div>
+                <!-- ✅ GANANCIA TOTAL A LA DERECHA -->
+                <div class="card stats-card" style="width: auto; min-width: 250px; margin: 0;">
+                    <span class="text-small">💰 GANANCIA TOTAL ACUMULADA</span>
+                    <h2 id="reporte-ganancia-total" style="color: var(--color-success); font-size: 2rem;">$0</h2>
+                </div>
+            </header>
+
+            <!-- ✅ FILTROS PARA EL HISTORIAL -->
+            <div class="inventory-header-actions" style="margin-bottom: 1.5rem;">
+                <div class="search-group">
+                    <label class="search-label">📅 TIPO DE VISTA</label>
+                    <div style="display: flex; gap: 10px;">
+                        <label style="flex: 1; display: flex; align-items: center; gap: 5px; cursor: pointer; background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--color-border);">
+                            <input type="radio" name="tipoReporte" value="dia" checked onchange="cambiarTipoReporte()">
+                            📆 Por Día
+                        </label>
+                        <label style="flex: 1; display: flex; align-items: center; gap: 5px; cursor: pointer; background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--color-border);">
+                            <input type="radio" name="tipoReporte" value="mes" onchange="cambiarTipoReporte()">
+                            📅 Por Mes
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="actions-group">
+                    <div class="filter-item">
+                        <label class="filter-label">🔍 BUSCAR FECHA</label>
+                        <input type="text" id="buscarFechaReporte" class="form-control" 
+                            placeholder="Ej: 2024-01 o 15/01/2024">
+                    </div>
+                    <button class="btn-action btn-outline" onclick="limpiarFiltrosReporte()" 
+                            style="width: auto; padding: 10px 20px;">
+                        🧹 Limpiar
+                    </button>
+                    <button class="btn-action btn-export" onclick="exportarReporteExcel()" 
+                            style="width: auto; padding: 10px 20px;">
+                        📥 Exportar
+                    </button>
+                </div>
+            </div>
+
+            <!-- ✅ TABLA DE HISTORIAL DE VENTAS -->
+            <section class="card" style="margin-bottom: 2rem;">
+                <h3>📊 Historial de Ventas</h3>
+                <div class="table-responsive">
+                    <table class="table-detailed">
+                        <thead>
+                            <tr>
+                                <th>Período</th>
+                                <th>Fecha</th>
+                                <th># Facturas</th>
+                                <th>Total Ventas</th>
+                                <th>Costo Total</th>
+                                <th>Ganancia Neta</th>
+                                <th>Margen %</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaHistorialReportes"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Productos más vendidos y alertas (se mantienen igual) -->
+            <div class="dashboard-grid">
+                <section class="card">
+                    <h3>🏆 Productos Más Vendidos</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Unidades</th>
+                                    <th>Ingreso Generado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaTopVentas"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h3>⚠️ Alertas de Reabastecimiento</h3>
+                    <div id="listaAlertasReporte"></div>
+                </section>
+            </div>
+        </div>
+        
+        <!-- ==================== VISTA: CARTERA ==================== -->
+        <div id="view-cartera" class="content-view">
+            <header class="section-header">
+                <div>
+                    <h2>📓 Control de Cartera</h2>
+                    <p class="text-small">Gestión de deudas de clientes y abonos</p>
+                </div>
+                <div class="stats-mini">
+                    <div class="card stats-mini-card">
+                        <label class="text-small">TOTAL POR COBRAR</label>
+                        <h3 id="total-cartera">$0.00</h3>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Botón para abonar deuda -->
+            <div style="margin-bottom: 1.5rem;">
+                <button class="btn-action btn-success" onclick="abrirModalAbono(null, event)" style="width: auto; padding: 12px 30px;">
+                    💵 Registrar Abono a Deuda
+                </button>
+            </div>
+            
+            <section class="card">
+                <div class="table-responsive">
+                    <table class="table-detailed">
+                        <thead>
+                            <tr>
+                                <th>Cliente / Contacto</th>
+                                <th>Descripción de Deuda</th>
+                                <th>Fecha Registro</th>
+                                <th>Vencimiento</th>
+                                <th>Monto Total</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="carteraTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== VISTA: FONDO DE AHORRO =================== -->
+        <div id="view-ahorros" class="content-view">
+            <header class="section-header">
+                <h2>💰 Gestión de Fondo de Reserva</h2>
+                <p class="text-small">Control del 5% de ahorro y disponibilidad de caja operativa</p>
+            </header>
+
+            <!-- Métricas de ahorro -->
+            <div class="grid-metrics">
+                <div class="card stats-card">
+                    <span class="text-small">Ingresos Totales (100%)</span>
+                    <h2 id="ahorro-ingresos-totales">$0.00</h2>
+                </div>
+
+                <div class="card stats-card">
+                    <span class="text-small">Ahorro Neto (5% - Retiros)</span>
+                    <h2 id="ahorro-acumulado">$0.00</h2>
+                </div>
+
+                <div class="card stats-card">
+                    <span class="text-small">Capital para Mercancía (95%)</span>
+                    <h2 id="capital-operativo">$0.00</h2>
+                </div>
+            </div>
+
+            <!-- Botones de acción para ahorro -->
+            <div class="ahorro-actions" style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                <button class="btn-action btn-success" onclick="abrirModalAbonoAhorro(event)" style="flex: 1;">
+                    💵 Abonar al Fondo de Ahorro
+                </button>
+                <button class="btn-action btn-danger" onclick="solicitarRetiroAhorro(event)" style="flex: 1;">
+                    💸 Registrar Gasto del Ahorro
+                </button>
+            </div>
+
+            <!-- Historial de movimientos -->
+            <section class="card">
+                <h3>📜 Historial de Movimientos de Caja</h3>
+                <div class="table-responsive">
+                    <table class="table-ahorro">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Concepto / Motivo</th>
+                                <th>Tipo</th>
+                                <th>Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historialAhorroBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ==================== MODALES ==================== -->
+
+    <!-- Modal de proveedor -->
+    <div id="modalProveedor" class="modal-overlay">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3 id="modalProveedorTitulo">🤝 Registro de Proveedor</h3>
+                <button class="btn-close-modal" onclick="cerrarModalProv()">×</button>
+            </div>
+            
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <!-- Información básica -->
+                <div class="section-title">
+                    <h4>📋 Información Básica</h4>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nombre de la Empresa *</label>
+                    <input type="text" id="provNombre" class="form-control" placeholder="Ej: Ferretería López S.A.">
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group" style="flex: 2;">
+                        <label>Persona de Contacto *</label>
+                        <input type="text" id="provContacto" class="form-control" placeholder="Ej: Juan López - Gerente">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Cargo</label>
+                        <input type="text" id="provCargo" class="form-control" placeholder="Ej: Gerente de Ventas">
+                    </div>
+                </div>
+                
+                <!-- Información de contacto -->
+                <div class="section-title">
+                    <h4>📞 Información de Contacto</h4>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Teléfono Principal *</label>
+                        <input type="tel" id="provTelefono" class="form-control" placeholder="Ej: 3001234567">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Teléfono Secundario</label>
+                        <input type="tel" id="provTelefono2" class="form-control" placeholder="Opcional">
+                    </div>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Correo Electrónico *</label>
+                        <input type="email" id="provEmail" class="form-control" placeholder="proveedor@empresa.com">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Sitio Web</label>
+                        <input type="url" id="provWeb" class="form-control" placeholder="https://www.empresa.com">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Dirección Completa</label>
+                    <textarea id="provDireccion" class="form-control" rows="2" placeholder="Calle, número, ciudad, departamento"></textarea>
+                </div>
+                
+                <!-- Información comercial -->
+                <div class="section-title">
+                    <h4>💰 Información Comercial</h4>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Categoría Principal *</label>
+                        <select id="provCategoria" class="form-control">
+                            <option value="">Seleccionar categoría...</option>
+                            <option value="Herramientas">Herramientas</option>
+                            <option value="Electricidad">Electricidad</option>
+                            <option value="Tubos y Conexiones">Tubos y Conexiones</option>
+                            <option value="Materiales de Construcción">Materiales de Construcción</option>
+                            <option value="Pinturas">Pinturas</option>
+                            <option value="Ferretería General">Ferretería General</option>
+                            <option value="Sanitarios">Sanitarios</option>
+                            <option value="Tornillería">Tornillería</option>
+                            <option value="Seguridad">Seguridad</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Productos que suministra *</label>
+                        <input type="text" id="provProductos" class="form-control" placeholder="Ej: Tuberías PVC, herramientas eléctricas">
+                    </div>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Tiempo de Entrega</label>
+                        <select id="provTiempoEntrega" class="form-control">
+                            <option value="">Seleccionar...</option>
+                            <option value="Inmediato (24h)">Inmediato (24h)</option>
+                            <option value="Rápido (2-3 días)">Rápido (2-3 días)</option>
+                            <option value="Normal (5-7 días)">Normal (5-7 días)</option>
+                            <option value="Programado (+7 días)">Programado (+7 días)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Condiciones de Pago</label>
+                        <select id="provCondicionesPago" class="form-control">
+                            <option value="">Seleccionar...</option>
+                            <option value="Contado">Contado</option>
+                            <option value="Crédito 15 días">Crédito 15 días</option>
+                            <option value="Crédito 30 días">Crédito 30 días</option>
+                            <option value="Crédito 60 días">Crédito 60 días</option>
+                            <option value="Negociable">Negociable</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Información de precios -->
+                <div class="section-title">
+                    <h4>🏷️ Información de Precios</h4>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Precio promedio de productos</label>
+                        <div class="input-with-symbol">
+                            <span class="input-symbol">$</span>
+                            <input type="number" id="provPrecioPromedio" class="form-control" placeholder="0" min="0" step="1000">
+                        </div>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Descuento habitual (%)</label>
+                        <div class="input-with-symbol">
+                            <span class="input-symbol">%</span>
+                            <input type="number" id="provDescuento" class="form-control" placeholder="0" min="0" max="100" step="1">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Calificación del proveedor</label>
+                    <div class="rating-container">
+                        <div class="rating-stars" id="provRating">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                        <span id="ratingValue" style="margin-left: 10px; font-weight: bold; color: #f39c12;">0/5</span>
+                        <input type="hidden" id="provRatingValue" value="0">
+                    </div>
+                </div>
+                
+                <!-- Información adicional -->
+                <div class="section-title">
+                    <h4>📝 Información Adicional</h4>
+                </div>
+                
+                <div class="form-group">
+                    <label>Notas u observaciones</label>
+                    <textarea id="provNotas" class="form-control" rows="3" placeholder="Información adicional sobre el proveedor, calidad de productos, etc."></textarea>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Estado del proveedor</label>
+                        <select id="provEstado" class="form-control">
+                            <option value="Activo">✅ Activo</option>
+                            <option value="Inactivo">⏸️ Inactivo</option>
+                            <option value="Bloqueado">❌ Bloqueado</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Fecha de registro</label>
+                        <input type="date" id="provFechaRegistro" class="form-control" value="">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer" style="justify-content: space-between;">
+                <div>
+                    <small style="color: var(--color-text-secondary);">* Campos obligatorios</small>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-action btn-danger" onclick="cerrarModalProv()">Cancelar</button>
+                    <button id="btnGuardarProveedor" class="btn-action" onclick="guardarProveedor()">✅ Registrar Proveedor</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de producto (general y tubos) -->
+    <div id="modalProducto" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modalProductoTitulo">📦 Gestión de Artículo</h3>
+            
+            <div class="form-row-flex">
+                <div class="form-group">
+                    <label>Referencia</label>
+                    <input type="text" id="prodRef" class="form-control" placeholder="REF-001">
+                </div>
+                <div class="form-group campo-categoria">
+                    <label for="prodCat">Categoría:</label>
+                    <select id="prodCat" class="form-control"></select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Nombre del Artículo</label>
+                <input type="text" id="prodNombre" class="form-control">
+            </div>
+
+            <!-- Campos específicos para tubos -->
+            <div id="campos-especificos-tubos" class="campos-tubos" style="display: none;">
+                <div class="form-row-flex">
+                    <div class="form-group">
+                        <label>Material</label>
+                        <select id="tuboMaterial" class="form-control">
+                            <option value="PVC">PVC</option>
+                            <option value="CPVC">CPVC</option>
+                            <option value="Galvanizado">Galvanizado</option>
+                            <option value="Acero">Acero</option>
+                            <option value="Acero Inoxidable">Acero Inoxidable</option>
+                            <option value="Cobre">Cobre</option>
+                            <option value="Polietileno">Polietileno</option>
+                            <option value="PPR">PPR</option>
+                            <option value="PEX">PEX</option>
+                            <option value="Hierro Fundido">Hierro Fundido</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Diámetro</label>
+                        <input type="text" id="tuboDiametro" class="form-control" placeholder="1/2'' o 20mm">
+                    </div>
+                    <div class="form-group">
+                        <label>Longitud</label>
+                        <input type="text" id="tuboLongitud" class="form-control" placeholder="6m o 20ft">
+                    </div>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group">
+                        <label>Presión</label>
+                        <input type="text" id="tuboPresion" class="form-control" placeholder="RDE 21 o 150 PSI">
+                    </div>
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                        <select id="tuboProveedor" class="form-control">
+                            <option value="">Seleccionar proveedor...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ubicación</label>
+                        <input type="text" id="tuboUbicacion" class="form-control" placeholder="Bodega de tubos, Estante A">
+                    </div>
+                </div>
+
+                <!-- Campos de costo, precio y stock específicos para tubos -->
+                <div class="form-row-flex">
+                    <div class="form-group">
+                        <label>Costo ($)</label>
+                        <input type="number" id="tuboCompra" class="form-control" step="0.01" min="0" placeholder="Costo unitario">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio Venta ($)</label>
+                        <input type="number" id="tuboVenta" class="form-control" step="0.01" min="0" placeholder="Precio de venta">
+                    </div>
+                    <div class="form-group">
+                        <label>Stock Inicial</label>
+                        <input type="number" id="tuboStock" class="form-control" value="0" min="0" placeholder="Cantidad inicial">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campos generales (visibles por defecto) -->
+            <div id="campos-generales">
+                <div class="form-row-flex">
+                    <div class="form-group">
+                        <label>Costo ($)</label>
+                        <input type="number" id="prodCompra" class="form-control" step="0.01" min="0" placeholder="Costo unitario">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio Venta ($)</label>
+                        <input type="number" id="prodVenta" class="form-control" step="0.01" min="0" placeholder="Precio de venta">
+                    </div>
+                    <div class="form-group">
+                        <label>Stock Inicial</label>
+                        <input type="number" id="prodStock" class="form-control" value="0" min="0" placeholder="Cantidad inicial">
+                    </div>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group" style="flex: 2;">
+                        <label>Proveedor</label>
+                        <select id="prodProv" class="form-control">
+                            <option value="">Seleccionar proveedor...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Ubicación</label>
+                        <input type="text" id="prodUbic" class="form-control" placeholder="Estante A - Bodega B">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-action" onclick="guardarProducto()">✅ Guardar</button>
+                <button class="btn-action btn-danger" onclick="cerrarModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL DE NOTIFICACIONES ==================== -->
+    <div id="modalNotificacion" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 id="notificacionTitulo">📢 Notificación</h3>
+                <button class="btn-close-modal" onclick="cerrarModalNotificacion()">×</button>
+            </div>
+            
+            <div class="modal-body">
+                <div id="notificacionIcono" style="text-align: center; font-size: 3rem; margin: 20px 0;">
+                    ⚠️
+                </div>
+                
+                <div id="notificacionMensaje" style="text-align: center; margin-bottom: 20px;">
+                    Mensaje de notificación aquí...
+                </div>
+                
+                <div id="notificacionContenido" style="max-height: 300px; overflow-y: auto; display: none;"></div>
+                <div id="notificacionAcciones" style="display: none;"></div>
+            </div>
+            
+            <div class="modal-footer" style="justify-content: center; gap: 10px;">
+                <button id="notificacionBtnPrimario" class="btn-action" onclick="cerrarModalNotificacion()">Aceptar</button>
+                <button id="notificacionBtnSecundario" class="btn-action btn-danger" onclick="cerrarModalNotificacion()" style="display: none;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL PARA REGISTRAR CLIENTE ==================== -->
+    <div id="modalCliente" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3>👤 Registrar Nuevo Cliente</h3>
+                <button class="btn-close-modal" onclick="cerrarModalCliente()">×</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nombre o Empresa *</label>
+                    <input type="text" id="clienteRegNombre" class="form-control" placeholder="Ej: Ferretería López">
+                </div>
+                
+                <div class="form-group">
+                    <label>NIT / Cédula</label>
+                    <input type="text" id="clienteRegNit" class="form-control" placeholder="Ej: 123456789-0">
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Teléfono</label>
+                        <input type="tel" id="clienteRegTelefono" class="form-control" placeholder="3001234567">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Email</label>
+                        <input type="email" id="clienteRegEmail" class="form-control" placeholder="cliente@empresa.com">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Dirección</label>
+                    <textarea id="clienteRegDireccion" class="form-control" rows="2" placeholder="Calle, número, ciudad"></textarea>
+                </div>
+                
+                <small style="color: var(--color-text-secondary);">* Campos obligatorios</small>
+            </div>
+            
+            <div class="modal-footer" style="justify-content: flex-end; gap: 10px;">
+                <button class="btn-action btn-danger" onclick="cerrarModalCliente()">Cancelar</button>
+                <button class="btn-action btn-success" onclick="guardarCliente()">✅ Registrar Cliente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script principal -->
+    <script src="main.js"></script>
+</body>
+</html>
+
+
+
+
+<!-- Hecho Por: -->
+<!--Cristian Esteban Ruiz Parra Identificado con 1021673281-->
+<!-- Prueba -->

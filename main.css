@@ -1,0 +1,1665 @@
+/* ============================================
+   1. VARIABLES Y CONFIGURACIÓN BASE
+   =========================================== */
+:root {
+    --color-bg-primary: #f5f3f0;
+    --color-bg-secondary: #ffffff;
+    --color-bg-tertiary: #f8f9fa;
+    --color-primary: #3a506b;
+    --color-primary-dark: #2c3e50;
+    --color-accent: #8b7355;
+    --color-text-primary: #2c3e50;
+    --color-text-secondary: #5d6d7e;
+    --color-success: #27ae60;
+    --color-error: #c0392b;
+    --color-border: #eaecee;
+    --sidebar-width: 260px;
+    --radius-md: 6px;
+    --radius-lg: 10px;
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body { 
+    font-family: 'Inter', sans-serif; 
+    background-color: var(--color-bg-primary); 
+    display: flex; 
+    min-height: 100vh; 
+}
+
+/* ============================================
+   2. SIDEBAR (NAVEGACIÓN)
+   ============================================ */
+.sidebar { 
+    width: var(--sidebar-width); 
+    background-color: var(--color-primary-dark); 
+    color: white; 
+    padding: 1.5rem; 
+    display: flex; 
+    flex-direction: column; 
+    position: fixed; 
+    height: 100vh; 
+    z-index: 100; 
+}
+
+.sidebar-header h2 { 
+    font-size: 1.3rem; 
+    margin-bottom: 2rem; 
+    border-bottom: 1px solid rgba(255,255,255,0.1); 
+    padding-bottom: 1rem; 
+}
+
+.nav-menu { 
+    list-style: none; 
+    flex-grow: 1; 
+}
+
+.nav-item { 
+    padding: 12px; 
+    margin-bottom: 5px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-item:hover, .nav-item.active { 
+    background: var(--color-accent); 
+}
+
+/* Estilos para sub-menú */
+.sub-menu {
+    display: none;
+    list-style: none;
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+
+.sub-item {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    margin-top: 2px;
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.sub-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.arrow-icon {
+    font-size: 0.7rem;
+    transition: transform 0.3s;
+}
+
+.nav-item.open .arrow-icon {
+    transform: rotate(180deg);
+}
+
+.sidebar-footer { 
+    margin-top: auto; 
+    padding-top: 1rem; 
+    border-top: 1px solid rgba(255,255,255,0.1); 
+}
+
+/* ============================================
+   3. CONTENIDO PRINCIPAL
+   ============================================ */
+.main-content { 
+    margin-left: var(--sidebar-width); 
+    flex: 1; 
+    padding: 2rem; 
+    width: calc(100% - var(--sidebar-width));
+    min-height: 100vh;
+    background-color: var(--color-bg-primary);
+}
+
+.header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.header-main h1 {
+    font-size: 1.8rem;
+    color: var(--color-primary-dark);
+}
+
+.user-pill {
+    background: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid var(--color-border);
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   4. VISTAS SPA (Single Page Application)
+   ============================================ */
+.content-view {
+    width: 100%;
+    display: none;
+    flex-direction: column;
+}
+
+.content-view.active-view {
+    display: flex !important;
+}
+
+.section-header {
+    margin-bottom: 2rem;
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 5px;
+}
+
+/* ============================================
+   5. LAYOUTS DE GRID
+   ============================================ */
+.dashboard-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 1.5rem; 
+    width: 100%; 
+    align-items: start; 
+}
+
+.grid-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Ajustes específicos de vistas */
+#view-proveedores .dashboard-grid {
+    grid-template-columns: 2.5fr 1fr;
+}
+
+#view-reportes .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+}
+
+#view-reportes .grid-metrics,
+#view-ahorros .grid-metrics {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* ============================================
+   6. TARJETAS (CARDS)
+   ============================================ */
+.card { 
+    background: white; 
+    padding: 1.5rem; 
+    border-radius: var(--radius-lg); 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+    border: 1px solid var(--color-border); 
+}
+
+.card h3 { 
+    margin-bottom: 1.2rem; 
+    color: var(--color-primary-dark); 
+    border-left: 4px solid var(--color-accent); 
+    padding-left: 10px; 
+}
+
+.stats-card {
+    text-align: center;
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-3px);
+}
+
+.stats-mini-card {
+    padding: 10px 20px;
+    border-left: 5px solid var(--color-error);
+}
+
+.table-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+/* ============================================
+   7. FORMULARIOS Y CONTROLES
+   ============================================ */
+/* Asegura que cuando el campo esté visible, ocupe el ancho correcto */
+.form-group[style*="display: block"] {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.form-group label { 
+    display: block; 
+    font-size: 0.8rem; 
+    margin-bottom: 4px; 
+    font-weight: 600; 
+    color: var(--color-text-secondary);
+}
+
+.form-control { 
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid var(--color-border); 
+    border-radius: var(--radius-md); 
+    background: var(--color-bg-tertiary); 
+    font-size: 0.9rem; 
+    transition: border 0.3s;
+}
+
+.form-control:focus {
+    border-color: var(--color-accent);
+    outline: none;
+    background: white;
+}
+
+.form-row-flex { 
+    display: flex; 
+    gap: 12px; 
+    margin-bottom: 10px;
+}
+
+/* ============================================
+   8. BOTONES
+   ============================================ */
+.btn-action { 
+    background: var(--color-primary); 
+    color: white; 
+    border: none; 
+    padding: 12px; 
+    border-radius: var(--radius-md); 
+    cursor: pointer; 
+    font-weight: bold; 
+    width: 100%; 
+    transition: 0.2s; 
+    font-size: 0.9rem;
+}
+
+.btn-action:hover { 
+    opacity: 0.9; 
+}
+
+.btn-success { 
+    background: var(--color-success) !important; 
+    color: white !important;
+}
+
+/* CORRECCIÓN ESPECÍFICA PARA BOTONES ROJOS */
+.btn-danger { 
+    background-color: #c0392b !important; 
+    color: #ffffff !important;
+    padding: 12px;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+.btn-danger:hover { 
+    background-color: #a93226 !important;
+    color: #ffffff !important;
+}
+
+.btn-outline { 
+    background: transparent !important; 
+    color: var(--color-text-secondary); 
+    border: 1px solid var(--color-border); 
+}
+
+.btn-new {
+    width: auto;
+    padding: 10px 20px;
+}
+
+.btn-export {
+    background: var(--color-accent);
+    width: auto;
+}
+
+.btn-add-cart { 
+    background: var(--color-accent); 
+    color: white; 
+    border: none; 
+    padding: 0 15px; 
+    border-radius: var(--radius-md); 
+    cursor: pointer; 
+    font-weight: bold; 
+    font-size: 1.2rem;
+}
+
+/* ============================================
+   9. SISTEMA DE CARRITO
+   ============================================ */
+.input-group-flex { 
+    display: flex; 
+    gap: 8px; 
+    align-items: center;
+}
+
+#cantProducto { 
+    width: 80px; 
+    text-align: center; 
+}
+
+.cart-container { 
+    margin: 1rem 0; 
+    max-height: 250px; 
+    overflow-y: auto; 
+    border: 1px solid var(--color-border); 
+    border-radius: 8px; 
+}
+
+.table-cart { 
+    width: 100%; 
+    border-collapse: collapse; 
+    font-size: 0.85rem; 
+}
+
+.table-cart th { 
+    background: var(--color-bg-tertiary); 
+    padding: 8px; 
+    text-align: left; 
+    font-weight: 600;
+}
+
+.table-cart td { 
+    padding: 8px; 
+    border-bottom: 1px solid var(--color-border); 
+}
+
+.price-box { 
+    background: var(--color-bg-tertiary); 
+    padding: 1rem; 
+    border-radius: 8px; 
+    margin-bottom: 1rem; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border: 1px dashed var(--color-accent);
+    font-size: 1.1rem;
+}
+
+.action-buttons-flex { 
+    display: flex; 
+    gap: 10px; 
+}
+
+/* ============================================
+   10. HEADERS DE INVENTARIO
+   ============================================ */
+.inventory-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    gap: 20px;
+}
+
+.search-group {
+    flex: 1;
+    max-width: 400px;
+}
+
+.search-label,
+.filter-label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: var(--color-text-secondary);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.actions-group {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.filter-item {
+    min-width: 150px;
+}
+
+.filter-item .form-control {
+    width: 100%;
+}
+
+/* ============================================
+   11. TABLAS
+   ============================================ */
+.table-responsive { 
+    width: 100%; 
+    overflow-x: auto; 
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    background-color: white;
+}
+
+/* Encabezados de tablas */
+th { 
+    background: var(--color-primary-dark) !important; 
+    color: white !important;
+    padding: 15px 10px;
+    font-size: 0.75rem; 
+    text-transform: uppercase; 
+    white-space: nowrap;
+    text-align: left;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+/* Celdas de tablas */
+td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.85rem;
+    color: var(--color-text-primary);
+    vertical-align: middle;
+    background-color: transparent !important;
+}
+
+/* Filas de tablas */
+tr {
+    background-color: transparent !important;
+    color: var(--color-text-primary) !important;
+    transition: none !important;
+}
+
+tr:nth-child(even) {
+    background-color: #f8f9fa !important;
+}
+
+tr:hover {
+    background-color: #f1f1f1 !important;
+}
+
+/* Tablas detalladas */
+.table-detailed {
+    width: 100%;
+    min-width: 1100px;
+}
+
+/* Botones de tabla */
+.btn-table {
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
+    background: white;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 0.9rem;
+}
+
+.btn-table:hover {
+    background: var(--color-bg-tertiary);
+}
+
+.action-btns {
+    display: flex;
+    gap: 5px;
+}
+
+/* ============================================
+   12. BADGES DE ESTADO
+   ============================================ */
+.badge { 
+    padding: 6px 12px; 
+    border-radius: 50px; 
+    font-size: 0.7rem; 
+    font-weight: 700; 
+    display: inline-block; 
+    text-align: center; 
+    min-width: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border: 1px solid transparent;
+}
+
+.badge-estado {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+/* ============================================
+   13. LISTAS Y ELEMENTOS ESPECIALES
+   ============================================ */
+.supplier-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.supplier-item {
+    padding: 12px;
+    background: white;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--color-accent);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.supplier-item .prod-name {
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.alerta-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 10px;
+    border: 1px solid var(--color-border);
+    background: white;
+}
+
+.ranking-number {
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-right: 8px;
+    font-size: 1.1rem;
+}
+
+.text-money {
+    color: var(--color-success);
+    font-weight: 600;
+}
+
+/* ============================================
+   14. MÓDULO DE CARTERA
+   ============================================ */
+.text-profit { 
+    color: var(--color-success); 
+    font-weight: 700; 
+}
+
+.text-cost { 
+    color: var(--color-error); 
+    font-weight: 700; 
+}
+
+.text-small { 
+    font-size: 0.75rem; 
+    color: var(--color-text-secondary); 
+    text-transform: uppercase; 
+}
+
+#view-cartera .text-cost {
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.stats-mini {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-abono-total {
+    background-color: var(--color-success);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    font-size: 0.8rem;
+}
+
+.btn-abono-total:hover {
+    background-color: #219150;
+    box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+}
+
+.vencido {
+    color: var(--color-error) !important;
+    font-weight: bold;
+}
+
+/* ============================================
+   15. MÓDULO DE FONDO DE AHORRO
+   ============================================ */
+#ahorro-acumulado {
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+#ahorro-ingresos-totales,
+#capital-operativo {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.ahorro-actions {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+}
+
+.ahorro-actions .btn-danger {
+    background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+    border: none;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+    transition: all 0.3s ease;
+}
+
+.ahorro-actions .btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(231, 76, 60, 0.4);
+    background: linear-gradient(135deg, #a93226 0%, #c0392b 100%);
+}
+
+.table-ahorro th {
+    background: var(--color-primary-dark);
+    color: white;
+    padding: 12px 15px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+}
+
+.table-ahorro td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.85rem;
+}
+
+/* Badges para tipos de movimiento */
+.badge-ingreso {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.badge-retiro {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* ============================================
+   16. MODALES
+   ============================================ */
+.modal-overlay { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.5); 
+    display: none;
+    justify-content: center; 
+    align-items: center; 
+    z-index: 1000; 
+}
+
+.modal-content { 
+    background: white; 
+    padding: 2rem; 
+    border-radius: 12px; 
+    width: 600px; 
+    max-width: 95%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+}
+
+.modal-footer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    gap: 10px;
+}
+
+/* Campos específicos para tubos en modal */
+.campos-tubos {
+    background: #f0f7ff;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 10px 0;
+    border: 1px solid #cfe2ff;
+    display: none;
+}
+
+.campos-tubos .form-row-flex {
+    gap: 10px;
+}
+
+/* ============================================
+   17. UTILIDADES
+   ============================================ */
+.divider { 
+    margin: 1.5rem 0; 
+    border: none;
+    border-top: 1px solid var(--color-border);
+    opacity: 0.3;
+}
+
+/* ============================================
+   18. ANIMACIONES
+   ============================================ */
+@keyframes fadeIn { 
+    from { opacity: 0; } 
+    to { opacity: 1; } 
+}
+
+/* ============================================
+   19. RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 1200px) {
+    .dashboard-grid,
+    .grid-metrics {
+        grid-template-columns: 1fr !important;
+    }
+    
+    #view-proveedores .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    #view-reportes .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 1024px) {
+    .inventory-header-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    
+    .search-group {
+        max-width: 100%;
+    }
+    
+    .actions-group {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+        padding: 1rem 0.5rem;
+    }
+    
+    .sidebar-header h2, 
+    .nav-item span, 
+    .sidebar-footer {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+        padding: 1rem;
+    }
+    
+    .form-row-flex {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .header-main {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .modal-content {
+        padding: 1.5rem;
+        width: 95%;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 1rem;
+    }
+    
+    .btn-action,
+    .btn-new,
+    .btn-export {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .actions-group {
+        flex-direction: column;
+    }
+    
+    .filter-item {
+        width: 100%;
+    }
+}
+
+/* ============================================
+   20. SELECTS MEJORADOS
+   ============================================ */
+.select-proveedor {
+    position: relative;
+}
+
+.select-proveedor .form-control {
+    padding-right: 40px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%235d6d7e' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+.select-proveedor .form-control option {
+    padding: 8px;
+}
+
+.select-proveedor .form-control:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+}
+
+.select-proveedor::after {
+    content: "▼";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-secondary);
+    font-size: 0.8rem;
+    pointer-events: none;
+}
+
+.select-proveedor optgroup {
+    font-weight: bold;
+    color: var(--color-primary-dark);
+    background-color: var(--color-bg-tertiary);
+}
+
+.select-proveedor option {
+    padding: 8px 12px;
+}
+
+.select-proveedor .form-control option:checked {
+    background-color: var(--color-accent);
+    color: white;
+}
+
+/* ============================================
+   21. ESTILOS PARA MODAL DE NOTIFICACIONES
+   ============================================ */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 20px;
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.btn-close-modal:hover {
+    background: var(--color-bg-tertiary);
+    color: var(--color-error);
+}
+
+.modal-body {
+    padding: 10px 0;
+}
+
+/* Estilos específicos para tablas en notificaciones */
+.notificacion-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 0.9rem;
+}
+
+.notificacion-table th {
+    background: var(--color-bg-tertiary);
+    padding: 10px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--color-border);
+}
+
+.notificacion-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.notificacion-table tr:hover {
+    background: var(--color-bg-secondary);
+}
+
+/* Estilos para listas de notificaciones */
+.notificacion-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notificacion-item {
+    padding: 10px 15px;
+    margin: 5px 0;
+    background: var(--color-bg-secondary);
+    border-radius: 6px;
+    border-left: 4px solid var(--color-primary);
+}
+
+.notificacion-item.critico {
+    border-left-color: var(--color-error);
+}
+
+.notificacion-item.advertencia {
+    border-left-color: #e67700;
+}
+
+.notificacion-item.info {
+    border-left-color: var(--color-primary);
+}
+
+/* Estilos para formularios en notificaciones */
+.notificacion-form {
+    padding: 15px;
+    background: var(--color-bg-secondary);
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+/* Animaciones para el modal de notificaciones */
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content[data-type="notificacion"] {
+    animation: slideInDown 0.3s ease;
+}
+
+/* ============================================
+   22. ESTILOS MEJORADOS PARA PROVEEDORES
+   ============================================ */
+.section-title {
+    margin: 20px 0 15px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.section-title h4 {
+    color: var(--color-primary);
+    margin: 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Input con símbolo */
+.input-with-symbol {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-symbol {
+    position: absolute;
+    left: 12px;
+    color: var(--color-text-secondary);
+    font-weight: bold;
+    z-index: 1;
+}
+
+.input-with-symbol .form-control {
+    padding-left: 30px;
+}
+
+/* Sistema de calificación con estrellas */
+.rating-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.rating-stars .star {
+    font-size: 1.8rem;
+    color: #ddd;
+    transition: color 0.2s;
+    user-select: none;
+}
+
+.rating-stars .star:hover,
+.rating-stars .star.active {
+    color: #f39c12;
+}
+
+.rating-stars .star.selected {
+    color: #f39c12;
+}
+
+/* Tabla mejorada para proveedores */
+.proveedor-card {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid var(--color-border);
+    transition: transform 0.2s;
+}
+
+.proveedor-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.proveedor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.proveedor-nombre {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+}
+
+.proveedor-categoria {
+    display: inline-block;
+    padding: 3px 8px;
+    background: var(--color-bg-tertiary);
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}
+
+.proveedor-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.info-label {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    min-width: 100px;
+}
+
+.info-value {
+    color: var(--color-text-primary);
+}
+
+.proveedor-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-border);
+}
+
+/* Badges para estado de proveedor */
+.badge-proveedor {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-activo {
+    background: #d4edda;
+    color: #155724;
+}
+
+.badge-inactivo {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.badge-bloqueado {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ============================================
+   23. TABLAS ESPECÍFICAS - IDs CORREGIDOS PARA MAIN.JS
+   ============================================ */
+
+/* Tabla de inventario completo - CORREGIDO */
+#fullInventoryTableBody tr {
+    background-color: transparent !important;
+}
+
+#fullInventoryTableBody td {
+    background-color: transparent !important;
+    color: var(--color-text-primary) !important;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 8px;
+    font-size: 0.85rem;
+}
+
+/* Tabla de tubos - CORREGIDO */
+#tubosTableBody tr {
+    background-color: transparent !important;
+}
+
+#tubosTableBody td {
+    background-color: transparent !important;
+    color: var(--color-text-primary) !important;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 8px;
+    font-size: 0.85rem;
+}
+
+/* Botones en tablas */
+#fullInventoryTableBody .btn-action,
+#tubosTableBody .btn-action,
+#suppliersTableBody .btn-action,
+#historialFacturas .btn-action,
+#carteraTableBody .btn-action {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    width: auto;
+    display: inline-block;
+}
+
+/* Tabla de facturación */
+#historialFacturas tr {
+    background-color: transparent !important;
+}
+
+#historialFacturas td {
+    background-color: transparent !important;
+}
+
+/* Tabla de proveedores */
+#suppliersTableBody tr {
+    background-color: transparent !important;
+}
+
+#suppliersTableBody td {
+    background-color: transparent !important;
+}
+
+/* Tabla de cartera */
+#carteraTableBody tr {
+    background-color: transparent !important;
+}
+
+#carteraTableBody td {
+    background-color: transparent !important;
+}
+
+/* Tabla de historial de ahorros */
+#historialAhorroBody tr {
+    background-color: transparent !important;
+}
+
+#historialAhorroBody td {
+    background-color: transparent !important;
+}
+
+/* Eliminar estilos dinámicos heredados */
+#fullInventoryTableBody .badge-categoria,
+#fullInventoryTableBody .badge-ubicacion,
+#fullInventoryTableBody .stock-indicator,
+#tubosTableBody .badge-material,
+#tubosTableBody .badge-diametro,
+#tubosTableBody .badge-longitud,
+#tubosTableBody .badge-presion,
+#tubosTableBody .stock-indicator {
+    background-color: transparent !important;
+    color: inherit !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    font-size: inherit !important;
+    font-weight: normal !important;
+}
+
+/* ============================================
+   24. ENCABEZADOS ESPECÍFICOS POR VISTA
+   ============================================ */
+
+/* Encabezados para vista de inventario */
+#view-inventario .table-detailed th {
+    background: var(--color-primary-dark) !important;
+    color: white !important;
+}
+
+/* Encabezados para vista de tubos */
+#view-tubos .table-detailed th {
+    background: var(--color-primary-dark) !important;
+    color: white !important;
+}
+
+/* Encabezados para vista de facturación */
+#view-facturacion .table-detailed th {
+    background: var(--color-primary-dark) !important;
+    color: white !important;
+}
+
+/* Encabezados para vista de proveedores */
+#view-proveedores .table-standard th {
+    background: var(--color-primary-dark) !important;
+    color: white !important;
+}
+
+/* Encabezados para vista de cartera */
+#view-cartera .table-detailed th {
+    background: var(--color-primary-dark) !important;
+    color: white !important;
+}
+
+/* Encabezados para vista de ahorros */
+#view-ahorros .table-ahorro th {
+    background: var(--color-primary-dark) !important;
+    color: white !important;
+}
+
+/* ============================================
+   25. ESTILOS PARA MODAL DE PRODUCTO
+   ============================================ */
+.campo-categoria {
+    flex: 1;
+}
+
+#modalProducto .modal-content {
+    max-width: 800px;
+}
+
+/* ============================================
+   26. UTILIDADES ADICIONALES
+   ============================================ */
+.text-success {
+    color: var(--color-success) !important;
+}
+
+.text-error {
+    color: var(--color-error) !important;
+}
+
+.text-accent {
+    color: var(--color-accent) !important;
+}
+
+.bg-light {
+    background-color: var(--color-bg-tertiary) !important;
+}
+
+/* Eliminar estilos de animación no utilizados */
+.no-animation {
+    animation: none !important;
+    transition: none !important;
+}
+
+/* Ajuste para selects en modales */
+#modalProducto select.form-control,
+#modalProveedor select.form-control {
+    background-color: white;
+}
+
+/* ============================================
+   27. ESTILOS PARA BADGES DE ESTADO (PRODUCTOS ESTANCADOS, ETC)
+   ============================================ */
+
+/* Badges base */
+.badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border: 1px solid transparent;
+    min-width: 100px;
+    text-align: center;
+}
+
+/* Badge éxito (stock normal) */
+.badge-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Badge advertencia (bajo stock) */
+.badge-warning {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+/* Badge peligro (agotado) */
+.badge-danger {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* BADGE MORADO - Productos Estancados */
+.badge-stagnant {
+    background: #f3f0ff;
+    color: #6741d9;
+    border: 1px solid #d0bfff;
+}
+
+/* Badge para métodos de pago (facturación) */
+.badge-contado {
+    background: #d4edda;
+    color: #155724;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.badge-credito {
+    background: #fff3cd;
+    color: #856404;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* Badge para estado de proveedores */
+.badge-estado.activo {
+    background: #d4edda;
+    color: #155724;
+}
+
+.badge-estado.inactivo {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.badge-estado.pendiente {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* ============================================
+   28. ESTILOS PARA FILAS DE ALERTA (TABLAS)
+   ============================================ */
+
+/* Fondo amarillo suave para productos con bajo stock o críticos */
+.stock-alert-ui,
+tr.stock-alert-ui {
+    background-color: #fff9e6 !important;
+}
+
+/* Fondo MORADO suave para productos estancados */
+.stock-stagnant-ui,
+tr.stock-stagnant-ui {
+    background-color: #f3f0ff !important;
+}
+
+/* ============================================
+   29. ESTILOS PARA MENÚ DESPLEGABLE DE INVENTARIO
+   ============================================ */
+
+/* Flecha indicadora */
+.arrow-icon {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    margin-left: 5px;
+    font-size: 0.7rem;
+}
+
+/* Flecha en estado abierto */
+.arrow-icon.open {
+    transform: rotate(180deg);
+}
+
+/* Submenú de inventario */
+#sub-inventario {
+    display: none;
+    list-style: none;
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+/* Mostrar submenú cuando está activo */
+#sub-inventario.active,
+#sub-inventario[style*="display: block"] {
+    display: block !important;
+}
+
+/* Items del submenú */
+.sub-item {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    margin-top: 2px;
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+}
+
+.sub-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Item padre activo */
+.nav-item.active {
+    background: var(--color-accent);
+}
+
+/* ============================================
+   30. CORRECCIONES PARA TABLAS DE INVENTARIO
+   ============================================ */
+
+/* Asegurar que los badges se vean correctamente dentro de las tablas */
+#fullInventoryTableBody td .badge,
+#tubosTableBody td .badge {
+    margin-top: 4px;
+    display: inline-block;
+}
+
+/* Estilo para el texto de stock con color */
+#fullInventoryTableBody td strong[style*="color"],
+#tubosTableBody td strong[style*="color"] {
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    min-width: 50px;
+    text-align: center;
+}
+
+/* ============================================
+   31. CORRECCIÓN DE BOTONES ROJOS (MODALES)
+   ============================================ */
+
+/* Asegurar que los botones de cancelar/eliminar sean VISIBLEMENTE ROJOS */
+#modalProducto .btn-danger,
+#modalProveedor .btn-danger,
+.modal-footer .btn-danger {
+    background-color: #c0392b !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px !important;
+    border-radius: var(--radius-md) !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    width: 100% !important;
+    font-size: 0.9rem !important;
+}
+
+#modalProducto .btn-danger:hover,
+#modalProveedor .btn-danger:hover,
+.modal-footer .btn-danger:hover {
+    background-color: #a93226 !important;
+    color: white !important;
+}
+
+/* ============================================
+   32. ESTILOS PARA LA TABLA DE TUBOS
+   ============================================ */
+
+/* Badge de estado dentro de la tabla de tubos */
+#tubosTableBody .badge {
+    min-width: 90px;
+    padding: 4px 8px;
+}
+
+/* ============================================
+   33. ESTILOS PARA CELDAS CON COLOR DE STOCK
+   ============================================ */
+
+/* Texto rojo para agotado */
+.texto-stock-agotado {
+    color: #c0392b !important;
+    font-weight: bold;
+}
+
+/* Texto naranja para bajo stock */
+.texto-stock-bajo {
+    color: #e67700 !important;
+    font-weight: bold;
+}
+
+/* Texto morado para estancado */
+.texto-stock-estancado {
+    color: #6741d9 !important;
+    font-weight: bold;
+}
+
+/* Texto verde para stock normal */
+.texto-stock-normal {
+    color: #27ae60 !important;
+    font-weight: bold;
+}
+
+/* ============================================
+   34. CLASES DE UTILIDAD PARA MODALES
+   ============================================ */
+
+/* Mostrar/ocultar campos de tubos */
+.campos-tubos {
+    display: none;
+}
+
+.campos-tubos[style*="display: block"] {
+    display: block !important;
+}
+
+/* Campo de categoría en modal */
+.campo-categoria {
+    flex: 1;
+}
+
+.campo-categoria[style*="display: none"] {
+    display: none !important;
+}
+
+/* ============================================
+   35. ANIMACIONES PARA MODAL DE NOTIFICACIONES
+   ============================================ */
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Aplicar animación al modal de notificación */
+.modal-content[data-type="notificacion"] {
+    animation: slideInDown 0.3s ease;
+}
