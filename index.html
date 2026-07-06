@@ -16,20 +16,20 @@
             <h2>🛠 FerreControl</h2>
         </div>
         <nav class="nav-menu">
-            <li class="nav-item active" data-view="view-dashboard">📊 Dashboard</li>
+            <li class="nav-item active" data-view="view-dashboard"> Dashboard</li>
             <li class="nav-item" data-view="view-inventario" id="menu-inventario">
-                <span>📦 Inventario</span>
+                <span> Inventario</span>
                 <i class="arrow-icon">▼</i>
             </li>
             <div class="sub-menu" id="sub-inventario">
-                <li class="nav-item sub-item" data-view="view-inventario">📦 Ver Todo</li>
-                <li class="nav-item sub-item" data-view="view-tubos">🚰 Sección Tubos</li>
+                <li class="nav-item sub-item" data-view="view-inventario"> Ver Todo</li>
+                <li class="nav-item sub-item" data-view="view-tubos"> Sección Tubos</li>
             </div>
-            <li class="nav-item" data-view="view-facturacion">🧾 Facturación</li>
-            <li class="nav-item" data-view="view-proveedores">🤝 Proveedores</li>
-            <li class="nav-item" data-view="view-reportes">📈 Reportes</li>
-            <li class="nav-item" data-view="view-cartera">📓 Cartera</li>
-            <li class="nav-item" data-view="view-ahorros">💰 Fondo de Ahorro</li>
+            <li class="nav-item" data-view="view-facturacion"> Facturación</li>
+            <li class="nav-item" data-view="view-proveedores"> Proveedores</li>
+            <li class="nav-item" data-view="view-reportes"> Reportes</li>
+            <li class="nav-item" data-view="view-cartera"> Cartera</li>
+            <li class="nav-item" data-view="view-ahorros"> Fondo de Ahorro</li>
         </nav>
         <div class="sidebar-footer">
             <button class="btn-action btn-danger" onclick="cerrarSesion()">Cerrar Sesión</button>
@@ -55,7 +55,7 @@
                 <!-- Tabla de inventario -->
                 <section class="card">
                     <div class="card-header-flex">
-                        <h3>📦 Inventario y Precios</h3>
+                        <h3> Inventario y Precios</h3>
                     </div>
                     <div class="table-responsive">
                         <table>
@@ -83,11 +83,11 @@
                             <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                                 <label style="flex: 1; display: flex; align-items: center; gap: 5px; cursor: pointer;">
                                     <input type="radio" name="tipoVenta" value="contado" checked onchange="toggleCamposCliente()">
-                                    💵 Contado (Persona Natural)
+                                     Contado (Persona Natural)
                                 </label>
                                 <label style="flex: 1; display: flex; align-items: center; gap: 5px; cursor: pointer;">
                                     <input type="radio" name="tipoVenta" value="credito" onchange="toggleCamposCliente()">
-                                    📓 Crédito (Empresarial)
+                                      Crédito (Empresarial)
                                 </label>
                             </div>
                         </div>
@@ -153,21 +153,21 @@
                         <div class="form-group" style="margin-bottom: 1rem;">
                             <label>Método de Pago</label>
                             <select id="metodoPago" class="form-control" onchange="toggleFechaCartera()">
-                                <option value="Efectivo">💵 Efectivo / Transferencia</option>
-                                <option value="Credito">📓 Crédito (A Cartera)</option>
+                                <option value="Efectivo"> Efectivo / Transferencia</option>
+                                <option value="Credito"> Crédito (A Cartera)</option>
                             </select>
                         </div>
 
                         <!-- Fecha de vencimiento (solo para crédito) -->
                         <div id="group-vencimiento" class="form-group" style="display: none;">
-                            <label style="color: var(--color-error);">📅 Fecha Límite de Pago</label>
+                            <label style="color: var(--color-error);"> Fecha Límite de Pago</label>
                             <input type="date" id="fechaVencimiento" class="form-control">
                         </div>
 
                         <!-- Botones de acción -->
                         <div class="action-buttons-flex">
-                            <button class="btn-action btn-success" onclick="procesarVenta()">✅ Finalizar</button>
-                            <button class="btn-action btn-outline" onclick="limpiarCarrito()">🗑️ Vaciar</button>
+                            <button class="btn-action btn-success" onclick="procesarVenta()"> Finalizar</button>
+                            <button class="btn-action btn-outline" onclick="limpiarCarrito()"> Vaciar</button>
                         </div>
                     </section>
                 </div>
@@ -191,7 +191,7 @@
                             <!-- Las opciones se llenarán dinámicamente -->
                         </select>
                     </div>
-                    <button class="btn-action btn-export" onclick="exportarInventarioExcel()">📥 Exportar Reporte</button>
+                    <button class="btn-action btn-export" onclick="exportarInventarioExcel()"> Exportar Reporte</button>
                     <button class="btn-action btn-new" onclick="abrirModalProducto('general', event)">+ Nuevo Producto</button>
                 </div>
             </div>
@@ -223,7 +223,7 @@
         <!-- ==================== VISTA: INVENTARIO DE TUBOS ==================== -->
         <div id="view-tubos" class="content-view">
             <header class="section-header">
-                <h2>🚰 Inventario Especializado de Tubos</h2>
+                <h2> Inventario Especializado de Tubos</h2>
                 <p class="text-small">Gestión independiente de tubería técnica: PVC, CPVC, Galvanizado</p>
             </header>
 
@@ -251,7 +251,7 @@
                             <option value="Hierro Fundido">Hierro Fundido</option>
                         </select>
                     </div>
-                    <button class="btn-action btn-export" onclick="exportarTubosExcel()">📥 Exportar Tubos</button>
+                    <button class="btn-action btn-export" onclick="exportarTubosExcel()"> Exportar Tubos</button>
                     <button class="btn-action btn-new" onclick="abrirModalProducto('tubos', event)">+ Nuevo Tubo</button>
                 </div>
             </div>
@@ -284,7 +284,7 @@
 
         <!-- ==================== VISTA: FACTURACIÓN ==================== -->
         <div id="view-facturacion" class="content-view">
-            <!-- ✅ Barra de filtros -->
+            <!-- Barra de filtros -->
             <div class="inventory-header-actions" style="margin-bottom: 1.5rem;">
                 <div class="search-group">
                     <label class="search-label">🔍 BUSCAR FACTURA</label>
@@ -294,19 +294,19 @@
                 
                 <div class="actions-group">
                     <div class="filter-item">
-                        <label class="filter-label">📅 DESDE</label>
+                        <label class="filter-label"> DESDE</label>
                         <input type="date" id="filterFechaInicio" class="form-control">
                     </div>
                     <div class="filter-item">
-                        <label class="filter-label">📅 HASTA</label>
+                        <label class="filter-label"> HASTA</label>
                         <input type="date" id="filterFechaFin" class="form-control">
                     </div>
                     <div class="filter-item">
-                        <label class="filter-label">💳 MÉTODO</label>
+                        <label class="filter-label"> MÉTODO</label>
                         <select id="filterMetodoPago" class="form-control">
                             <option value="todos">Todos</option>
-                            <option value="Efectivo">💵 Efectivo</option>
-                            <option value="Credito">📓 Crédito</option>
+                            <option value="Efectivo"> Efectivo</option>
+                            <option value="Credito"> Crédito</option>
                         </select>
                     </div>
                     <button class="btn-action btn-outline" id="btnLimpiarFiltrosFacturas" 
@@ -320,10 +320,10 @@
             <section class="card">
                 <h3>Historial de Transacciones</h3>
                 
-                <!-- ✅ NUEVO: Total de ventas (visible) -->
+                <!--  NUEVO: Total de ventas (visible) -->
                 <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
                     <div class="card stats-card" style="width: auto; min-width: 250px; padding: 10px 20px; background: var(--color-bg-tertiary);">
-                        <span class="text-small" style="color: var(--color-text-secondary);">💰 TOTAL VENTAS</span>
+                        <span class="text-small" style="color: var(--color-text-secondary);"> TOTAL VENTAS</span>
                         <h2 id="total-facturado" style="color: var(--color-success); font-size: 1.8rem; margin: 0;">$0</h2>
                     </div>
                 </div>
@@ -351,7 +351,7 @@
         <div id="view-proveedores" class="content-view">
             <header class="section-header">
                 <div>
-                    <h2>🤝 Directorio de Proveedores</h2>
+                    <h2> Directorio de Proveedores</h2>
                     <p class="text-small">Gestiona tus contactos y fuentes de abastecimiento</p>
                 </div>
                 <button class="btn-action btn-new" onclick="abrirModalProveedor(null, event)">+ Nuevo Proveedor</button>
@@ -380,7 +380,7 @@
                 <!-- Panel de mejores precios -->
                 <div class="right-column">
                     <section class="card">
-                        <h3>🤝 Mejores Precios</h3>
+                        <h3> Mejores Precios</h3>
                         <p class="text-small">Comparativa de proveedores por producto</p>
                         <div id="supplierList" class="supplier-list"></div>
                     </section>
@@ -392,35 +392,35 @@
         <div id="view-reportes" class="content-view">
             <header class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h2>📈 Reportes y Análisis de Negocio</h2>
+                    <h2> Reportes y Análisis de Negocio</h2>
                     <p class="text-small">Historial de ventas y rentabilidad</p>
                 </div>
-                <!-- ✅ GANANCIA TOTAL A LA DERECHA -->
+                <!--  GANANCIA TOTAL A LA DERECHA -->
                 <div class="card stats-card" style="width: auto; min-width: 250px; margin: 0;">
-                    <span class="text-small">💰 GANANCIA TOTAL ACUMULADA</span>
+                    <span class="text-small"> GANANCIA TOTAL ACUMULADA</span>
                     <h2 id="reporte-ganancia-total" style="color: var(--color-success); font-size: 2rem;">$0</h2>
                 </div>
             </header>
 
-            <!-- ✅ FILTROS PARA EL HISTORIAL -->
+            <!--  FILTROS PARA EL HISTORIAL -->
             <div class="inventory-header-actions" style="margin-bottom: 1.5rem;">
                 <div class="search-group">
-                    <label class="search-label">📅 TIPO DE VISTA</label>
+                    <label class="search-label"> TIPO DE VISTA</label>
                     <div style="display: flex; gap: 10px;">
                         <label style="flex: 1; display: flex; align-items: center; gap: 5px; cursor: pointer; background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--color-border);">
                             <input type="radio" name="tipoReporte" value="dia" checked onchange="cambiarTipoReporte()">
-                            📆 Por Día
+                             Por Día
                         </label>
                         <label style="flex: 1; display: flex; align-items: center; gap: 5px; cursor: pointer; background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--color-border);">
                             <input type="radio" name="tipoReporte" value="mes" onchange="cambiarTipoReporte()">
-                            📅 Por Mes
+                             Por Mes
                         </label>
                     </div>
                 </div>
                 
                 <div class="actions-group">
                     <div class="filter-item">
-                        <label class="filter-label">🔍 BUSCAR FECHA</label>
+                        <label class="filter-label"> BUSCAR FECHA</label>
                         <input type="text" id="buscarFechaReporte" class="form-control" 
                             placeholder="Ej: 2024-01 o 15/01/2024">
                     </div>
@@ -435,9 +435,9 @@
                 </div>
             </div>
 
-            <!-- ✅ TABLA DE HISTORIAL DE VENTAS -->
+            <!--  TABLA DE HISTORIAL DE VENTAS -->
             <section class="card" style="margin-bottom: 2rem;">
-                <h3>📊 Historial de Ventas</h3>
+                <h3> Historial de Ventas</h3>
                 <div class="table-responsive">
                     <table class="table-detailed">
                         <thead>
@@ -460,7 +460,7 @@
             <!-- Productos más vendidos y alertas (se mantienen igual) -->
             <div class="dashboard-grid">
                 <section class="card">
-                    <h3>🏆 Productos Más Vendidos</h3>
+                    <h3> Productos Más Vendidos</h3>
                     <div class="table-responsive">
                         <table>
                             <thead>
@@ -476,7 +476,7 @@
                 </section>
 
                 <section class="card">
-                    <h3>⚠️ Alertas de Reabastecimiento</h3>
+                    <h3> Alertas de Reabastecimiento</h3>
                     <div id="listaAlertasReporte"></div>
                 </section>
             </div>
@@ -486,7 +486,7 @@
         <div id="view-cartera" class="content-view">
             <header class="section-header">
                 <div>
-                    <h2>📓 Control de Cartera</h2>
+                    <h2> Control de Cartera</h2>
                     <p class="text-small">Gestión de deudas de clientes y abonos</p>
                 </div>
                 <div class="stats-mini">
@@ -500,7 +500,7 @@
             <!-- Botón para abonar deuda -->
             <div style="margin-bottom: 1.5rem;">
                 <button class="btn-action btn-success" onclick="abrirModalAbono(null, event)" style="width: auto; padding: 12px 30px;">
-                    💵 Registrar Abono a Deuda
+                     Registrar Abono a Deuda
                 </button>
             </div>
             
@@ -527,7 +527,7 @@
         <!-- ==================== VISTA: FONDO DE AHORRO =================== -->
         <div id="view-ahorros" class="content-view">
             <header class="section-header">
-                <h2>💰 Gestión de Fondo de Reserva</h2>
+                <h2> Gestión de Fondo de Reserva</h2>
                 <p class="text-small">Control del 5% de ahorro y disponibilidad de caja operativa</p>
             </header>
 
@@ -552,16 +552,16 @@
             <!-- Botones de acción para ahorro -->
             <div class="ahorro-actions" style="display: flex; gap: 1rem; margin-bottom: 2rem;">
                 <button class="btn-action btn-success" onclick="abrirModalAbonoAhorro(event)" style="flex: 1;">
-                    💵 Abonar al Fondo de Ahorro
+                     Abonar al Fondo de Ahorro
                 </button>
                 <button class="btn-action btn-danger" onclick="solicitarRetiroAhorro(event)" style="flex: 1;">
-                    💸 Registrar Gasto del Ahorro
+                     Registrar Gasto del Ahorro
                 </button>
             </div>
 
             <!-- Historial de movimientos -->
             <section class="card">
-                <h3>📜 Historial de Movimientos de Caja</h3>
+                <h3> Historial de Movimientos de Caja</h3>
                 <div class="table-responsive">
                     <table class="table-ahorro">
                         <thead>
@@ -585,14 +585,14 @@
     <div id="modalProveedor" class="modal-overlay">
         <div class="modal-content" style="max-width: 700px;">
             <div class="modal-header">
-                <h3 id="modalProveedorTitulo">🤝 Registro de Proveedor</h3>
+                <h3 id="modalProveedorTitulo"> Registro de Proveedor</h3>
                 <button class="btn-close-modal" onclick="cerrarModalProv()">×</button>
             </div>
             
             <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
                 <!-- Información básica -->
                 <div class="section-title">
-                    <h4>📋 Información Básica</h4>
+                    <h4> Información Básica</h4>
                 </div>
                 
                 <div class="form-group">
@@ -613,7 +613,7 @@
                 
                 <!-- Información de contacto -->
                 <div class="section-title">
-                    <h4>📞 Información de Contacto</h4>
+                    <h4> Información de Contacto</h4>
                 </div>
                 
                 <div class="form-row-flex">
@@ -645,7 +645,7 @@
                 
                 <!-- Información comercial -->
                 <div class="section-title">
-                    <h4>💰 Información Comercial</h4>
+                    <h4> Información Comercial</h4>
                 </div>
                 
                 <div class="form-row-flex">
@@ -697,7 +697,7 @@
                 
                 <!-- Información de precios -->
                 <div class="section-title">
-                    <h4>🏷️ Información de Precios</h4>
+                    <h4> Información de Precios</h4>
                 </div>
                 
                 <div class="form-row-flex">
@@ -734,7 +734,7 @@
                 
                 <!-- Información adicional -->
                 <div class="section-title">
-                    <h4>📝 Información Adicional</h4>
+                    <h4> Información Adicional</h4>
                 </div>
                 
                 <div class="form-group">
@@ -746,9 +746,9 @@
                     <div class="form-group" style="flex: 1;">
                         <label>Estado del proveedor</label>
                         <select id="provEstado" class="form-control">
-                            <option value="Activo">✅ Activo</option>
-                            <option value="Inactivo">⏸️ Inactivo</option>
-                            <option value="Bloqueado">❌ Bloqueado</option>
+                            <option value="Activo"> Activo</option>
+                            <option value="Inactivo"> Inactivo</option>
+                            <option value="Bloqueado"> Bloqueado</option>
                         </select>
                     </div>
                     <div class="form-group" style="flex: 1;">
@@ -773,7 +773,7 @@
     <!-- Modal de producto (general y tubos) -->
     <div id="modalProducto" class="modal-overlay">
         <div class="modal-content">
-            <h3 id="modalProductoTitulo">📦 Gestión de Artículo</h3>
+            <h3 id="modalProductoTitulo"> Gestión de Artículo</h3>
             
             <div class="form-row-flex">
                 <div class="form-group">
@@ -885,7 +885,7 @@
             </div>
 
             <div class="modal-footer">
-                <button class="btn-action" onclick="guardarProducto()">✅ Guardar</button>
+                <button class="btn-action" onclick="guardarProducto()"> Guardar</button>
                 <button class="btn-action btn-danger" onclick="cerrarModal()">Cancelar</button>
             </div>
         </div>
@@ -895,7 +895,7 @@
     <div id="modalNotificacion" class="modal-overlay">
         <div class="modal-content" style="max-width: 600px;">
             <div class="modal-header">
-                <h3 id="notificacionTitulo">📢 Notificación</h3>
+                <h3 id="notificacionTitulo"> Notificación</h3>
                 <button class="btn-close-modal" onclick="cerrarModalNotificacion()">×</button>
             </div>
             
@@ -923,7 +923,7 @@
     <div id="modalCliente" class="modal-overlay">
         <div class="modal-content" style="max-width: 500px;">
             <div class="modal-header">
-                <h3>👤 Registrar Nuevo Cliente</h3>
+                <h3> Registrar Nuevo Cliente</h3>
                 <button class="btn-close-modal" onclick="cerrarModalCliente()">×</button>
             </div>
             
@@ -959,7 +959,7 @@
             
             <div class="modal-footer" style="justify-content: flex-end; gap: 10px;">
                 <button class="btn-action btn-danger" onclick="cerrarModalCliente()">Cancelar</button>
-                <button class="btn-action btn-success" onclick="guardarCliente()">✅ Registrar Cliente</button>
+                <button class="btn-action btn-success" onclick="guardarCliente()"> Registrar Cliente</button>
             </div>
         </div>
     </div>
@@ -974,4 +974,4 @@
 
 <!-- Hecho Por: -->
 <!--Cristian Esteban Ruiz Parra Identificado con 1021673281-->
-<!-- Prueba -->
+<!--Jim Alejandro Quinones Martinez Identificado con 1022934378-->
