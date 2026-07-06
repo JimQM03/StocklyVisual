@@ -144,7 +144,7 @@ function cambiarVista(viewId) {
 // PARTE 3: INICIALIZACIÓN
 // ============================================
 function inicializarAplicacion() {
-    console.log('🚀 FerreControl iniciando en modo local...');
+    console.log(' FerreControl iniciando en modo local...');
     mostrarHoraLogin();
     configurarNavegacion();
     configurarFiltros();
@@ -152,7 +152,7 @@ function inicializarAplicacion() {
     cargarInventario(); cargarProveedores(); cargarFacturas(); cargarCartera(); cargarAhorros();
     actualizarTablaDashboard();
     llenarSelectProductos();
-    console.log('✅ Aplicación lista');
+    console.log(' Aplicación lista');
 }
 
 // ============================================
@@ -258,11 +258,11 @@ function abrirModalProducto(origen = 'general', event) {
     const cT = document.getElementById('campos-especificos-tubos');
     const cC = document.querySelector('.campo-categoria');
     if (origen === 'tubos') {
-        if (titulo) titulo.textContent = '🚰 Nuevo Tubo';
+        if (titulo) titulo.textContent = 'Nuevo Tubo';
         if (cG) cG.style.display = 'none'; if (cT) cT.style.display = 'block'; if (cC) cC.style.display = 'none';
         const sc = document.getElementById('prodCat'); if (sc) sc.value = 'Tubos';
     } else {
-        if (titulo) titulo.textContent = '📦 Nuevo Producto';
+        if (titulo) titulo.textContent = ' Nuevo Producto';
         if (cG) cG.style.display = 'block'; if (cT) cT.style.display = 'none'; if (cC) cC.style.display = 'block';
     }
     modal.style.display = 'flex';
@@ -350,11 +350,11 @@ function guardarProducto() {
     if (esEdicion) {
         const idx = AppState.inventario.findIndex(p => p.id === productoId);
         if (idx !== -1) AppState.inventario[idx] = { ...AppState.inventario[idx], ...datos };
-        mostrarNotificacion('✅ Producto actualizado correctamente', 'success');
+        mostrarNotificacion(' Producto actualizado correctamente', 'success');
     } else {
         datos.id = generarId();
         AppState.inventario.push(datos);
-        mostrarNotificacion('✅ Producto creado correctamente', 'success');
+        mostrarNotificacion(' Producto creado correctamente', 'success');
     }
     guardarInventario();
     actualizarTablaDashboard();
@@ -369,7 +369,7 @@ function confirmarEliminarProducto(id) {
         onConfirm: () => {
             AppState.inventario = AppState.inventario.filter(p => p.id !== id);
             guardarInventario();
-            mostrarNotificacion('✅ Producto eliminado correctamente', 'success');
+            mostrarNotificacion(' Producto eliminado correctamente', 'success');
             actualizarTablaDashboard(); actualizarVistaInventarioCompleto(); actualizarVistaTubos(); llenarSelectProductos();
         }
     });
@@ -541,7 +541,7 @@ function procesarVenta() {
     AppState.ahorros.historial.push({ id: generarId(), tipo: 'ingreso', monto: ahorroAuto, concepto: `Ahorro automático 5% - Factura #${factura.id}`, created_at: fechaCreacion });
     guardarAhorros();
 
-    mostrarNotificacion(`✅ Venta procesada. Factura #${factura.id}`, 'success');
+    mostrarNotificacion(` Venta procesada. Factura #${factura.id}`, 'success');
 
     // Limpiar
     carrito = [];
@@ -588,7 +588,7 @@ function guardarCliente() {
     AppState.cartera.push(nuevo);
     guardarCartera();
     actualizarSelectClientes();
-    mostrarNotificacion(`✅ Cliente ${nombre} registrado`, 'success');
+    mostrarNotificacion(` Cliente ${nombre} registrado`, 'success');
     cerrarModalCliente();
     setTimeout(() => { const s = document.getElementById('selectClienteVenta'); if (s) s.value = nuevo.id; }, 200);
 }
@@ -633,7 +633,7 @@ function actualizarVistaCartera() {
             <td class="${saldo>0?'deuda-pendiente':'al-dia'}"><strong>$${formatearMoneda(saldo)}</strong></td>
             <td><span class="badge-estado ${(cli.estado||'pendiente').toLowerCase()}">${cli.estado||'Pendiente'}</span></td>
             <td><div class="acciones-tabla">
-                <button class="btn-action btn-success" onclick="abrirModalAbono(${cli.id})" style="padding:8px 12px;font-size:0.75rem;">💸 Abonar</button>
+                <button class="btn-action btn-success" onclick="abrirModalAbono(${cli.id})" style="padding:8px 12px;font-size:0.75rem;"> Abonar</button>
                 <button class="btn-icon" onclick="verHistorialCliente(${cli.id})" title="Ver detalles">📜</button>
             </div></td>`;
         tabla.appendChild(tr);
@@ -651,7 +651,7 @@ function abrirModalAbono(clienteId = null, event) {
     const cli = AppState.cartera.find(c => c.id === clienteId);
     if (!cli) { mostrarNotificacion('Cliente no encontrado', 'error'); return; }
     mostrarModalPersonalizado({
-        titulo: '💸 Registrar Abono',
+        titulo: ' Registrar Abono',
         contenido: `
             <div class="form-group"><label>Cliente:</label><h3>${cli.nombre}</h3></div>
             <div class="form-group"><label>Saldo Actual:</label><h2 style="color:var(--color-error);">$${formatearMoneda(cli.saldo_pendiente||0)}</h2></div>
@@ -662,7 +662,7 @@ function abrirModalAbono(clienteId = null, event) {
             </div>`,
         botones: [
             { texto: 'Cancelar', clase: 'btn-danger', onClick: () => cerrarModalPersonalizado() },
-            { texto: '✅ Registrar Abono', clase: 'btn-success', onClick: () => procesarAbonoDesdeModal() }
+            { texto: 'Registrar Abono', clase: 'btn-success', onClick: () => procesarAbonoDesdeModal() }
         ]
     });
 }
@@ -687,7 +687,7 @@ function registrarAbono(clienteId, monto) {
     cli.historial_abonos = cli.historial_abonos || [];
     cli.historial_abonos.push({ id: generarId(), fecha: new Date().toISOString(), monto });
     guardarCartera();
-    mostrarNotificacion(`✅ Abono de $${formatearMoneda(monto)} registrado`, 'success');
+    mostrarNotificacion(` Abono de $${formatearMoneda(monto)} registrado`, 'success');
     return true;
 }
 
@@ -699,7 +699,7 @@ function verHistorialCliente(clienteId) {
         ? abonos.map(a => `<tr><td>${new Date(a.fecha).toLocaleDateString()}</td><td>$${formatearMoneda(a.monto)}</td></tr>`).join('')
         : '<tr><td colspan="2" class="text-center">Sin abonos registrados</td></tr>';
     mostrarModalPersonalizado({
-        titulo: `📜 Historial de ${cli.nombre}`,
+        titulo: ` Historial de ${cli.nombre}`,
         contenido: `
             <div class="form-group"><label>Saldo Pendiente:</label><h3 style="color:var(--color-error);">$${formatearMoneda(cli.saldo_pendiente||0)}</h3></div>
             <div class="form-group"><label>Historial de Abonos:</label>
@@ -742,13 +742,13 @@ function actualizarVistaAhorros() {
 function abrirModalAbonoAhorro(event) {
     if (event) event.stopPropagation();
     mostrarModalPersonalizado({
-        titulo: '💵 Abonar al Fondo de Ahorro',
+        titulo: ' Abonar al Fondo de Ahorro',
         contenido: `
             <div class="form-group"><label>Monto a Abonar:</label><input type="number" id="montoAbonoAhorro" class="form-control" placeholder="0.00" min="0" step="0.01"></div>
             <div class="form-group"><label>Concepto / Motivo:</label><input type="text" id="conceptoAbonoAhorro" class="form-control" placeholder="Ej: Abono extra"></div>`,
         botones: [
             { texto: 'Cancelar', clase: 'btn-danger', onClick: () => cerrarModalPersonalizado() },
-            { texto: '✅ Registrar Abono', clase: 'btn-success', onClick: () => procesarAbonoAhorro() }
+            { texto: ' Registrar Abono', clase: 'btn-success', onClick: () => procesarAbonoAhorro() }
         ]
     });
 }
@@ -761,7 +761,7 @@ function procesarAbonoAhorro() {
     AppState.ahorros.total = (AppState.ahorros.total || 0) + monto;
     AppState.ahorros.historial.push({ id: generarId(), tipo: 'ingreso', monto, concepto, created_at: new Date().toISOString() });
     guardarAhorros();
-    mostrarNotificacion('✅ Abono registrado correctamente', 'success');
+    mostrarNotificacion(' Abono registrado correctamente', 'success');
     actualizarVistaAhorros();
     cerrarModalPersonalizado();
 }
@@ -770,14 +770,14 @@ function solicitarRetiroAhorro(event) {
     if (event) event.stopPropagation();
     const disponible = AppState.ahorros?.total || 0;
     mostrarModalPersonalizado({
-        titulo: '💸 Registrar Retiro del Ahorro',
+        titulo: ' Registrar Retiro del Ahorro',
         contenido: `
             <div class="form-group"><label>Ahorro Disponible:</label><h3 style="color:var(--color-success);">$${formatearMoneda(disponible)}</h3></div>
             <div class="form-group"><label>Monto a Retirar:</label><input type="number" id="montoRetiroAhorro" class="form-control" placeholder="0.00" min="0" step="0.01" max="${disponible}"></div>
             <div class="form-group"><label>Motivo:</label><textarea id="motivoRetiroAhorro" class="form-control" rows="3" placeholder="Ej: Pago de deuda..."></textarea></div>`,
         botones: [
             { texto: 'Cancelar', clase: 'btn-danger', onClick: () => cerrarModalPersonalizado() },
-            { texto: '✅ Confirmar Retiro', clase: 'btn-success', onClick: () => procesarRetiroAhorro() }
+            { texto: ' Confirmar Retiro', clase: 'btn-success', onClick: () => procesarRetiroAhorro() }
         ]
     });
 }
@@ -791,7 +791,7 @@ function procesarRetiroAhorro() {
     AppState.ahorros.total = (AppState.ahorros.total || 0) - monto;
     AppState.ahorros.historial.push({ id: generarId(), tipo: 'retiro', monto, concepto: motivo, created_at: new Date().toISOString() });
     guardarAhorros();
-    mostrarNotificacion('✅ Retiro registrado correctamente', 'success');
+    mostrarNotificacion(' Retiro registrado correctamente', 'success');
     actualizarVistaAhorros();
     cerrarModalPersonalizado();
 }
@@ -839,13 +839,13 @@ function abrirModalProveedor(id = null, event) {
             document.getElementById('provEmail').value    = prov.email        || '';
             document.getElementById('provEstado').value   = prov.estado       || 'Activo';
             const ri = document.getElementById('provRatingValue'); if (ri) ri.value = prov.calificacion || 0;
-            if (titulo) titulo.textContent = '✏️ Editar Proveedor';
+            if (titulo) titulo.textContent = ' Editar Proveedor';
         }
     } else {
         delete modal.dataset.proveedorId;
         document.getElementById('provEstado').value = 'Activo';
         const ri = document.getElementById('provRatingValue'); if (ri) ri.value = 0;
-        if (titulo) titulo.textContent = '🤝 Nuevo Proveedor';
+        if (titulo) titulo.textContent = ' Nuevo Proveedor';
     }
     setTimeout(() => inicializarRatingProveedor(), 100);
     modal.style.display = 'flex';
@@ -879,11 +879,11 @@ function guardarProveedor() {
     if (esEdicion) {
         const idx = AppState.proveedores.findIndex(p => p.id === provId);
         if (idx !== -1) AppState.proveedores[idx] = { ...AppState.proveedores[idx], ...datos };
-        mostrarNotificacion('✅ Proveedor actualizado correctamente', 'success');
+        mostrarNotificacion(' Proveedor actualizado correctamente', 'success');
     } else {
         datos.id = generarId();
         AppState.proveedores.push(datos);
-        mostrarNotificacion('✅ Proveedor registrado correctamente', 'success');
+        mostrarNotificacion(' Proveedor registrado correctamente', 'success');
     }
     guardarProveedores();
     actualizarVistaProveedores();
@@ -939,7 +939,7 @@ function verDetalleProveedor(id) {
     const prov = AppState.proveedores.find(p => p.id === id);
     if (!prov) { mostrarNotificacion('Proveedor no encontrado', 'error'); return; }
     mostrarModalPersonalizado({
-        titulo: `🤝 Detalles de ${prov.nombre}`,
+        titulo: ` Detalles de ${prov.nombre}`,
         contenido: `
             <div class="form-group"><label>Contacto:</label><p>${prov.contacto||'N/A'}</p></div>
             <div class="form-group"><label>Teléfono:</label><p>${prov.telefono||'N/A'}</p></div>
@@ -955,7 +955,7 @@ function cargarComparativaProveedores() {
     if (!container) return;
     container.innerHTML = '';
     const activos = AppState.proveedores.filter(p => p.estado === 'Activo');
-    if (activos.length === 0) { container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--color-text-secondary);">🤝 No hay proveedores activos</div>'; return; }
+    if (activos.length === 0) { container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--color-text-secondary);"> No hay proveedores activos</div>'; return; }
     const cats = [...new Set(activos.map(p => p.categoria).filter(Boolean))];
     if (cats.length === 0) mostrarMejoresProveedores(activos, 'General', container);
     else cats.forEach(cat => mostrarMejoresProveedores(activos.filter(p => p.categoria === cat), cat, container));
@@ -1063,7 +1063,7 @@ function mostrarDetalleFacturaModal(facturaId) {
     let fecha = '-';
     try { fecha = new Date(factura.fecha_creacion||factura.fecha).toLocaleString(); } catch(e) {}
     mostrarModalPersonalizado({
-        titulo: `🧾 Factura #${factura.id}`,
+        titulo: ` Factura #${factura.id}`,
         contenido: `
             <div class="form-group"><label>Fecha:</label><p>${fecha}</p></div>
             <div class="form-group"><label>Cliente:</label><p>${factura.cliente_nombre||'Mostrador'}</p></div>
@@ -1103,8 +1103,8 @@ function generarVentanaImpresion(factura, productos) {
     <table><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Subtotal</th></tr></thead><tbody>${html}</tbody></table>
     <div class="total">TOTAL: $${formatearMoneda(factura.total||0)}</div>
     <div class="btns">
-        <button class="btn btn-p" onclick="window.print()">🖨️ Imprimir</button>
-        <button class="btn btn-c" onclick="window.close()">❌ Cerrar</button>
+        <button class="btn btn-p" onclick="window.print()"> Imprimir</button>
+        <button class="btn btn-c" onclick="window.close()"> Cerrar</button>
     </div>
     <div style="margin-top:50px;text-align:center;color:#7f8c8d"><p>¡Gracias por su compra!</p></div>
     </body></html>`);
@@ -1160,7 +1160,7 @@ function actualizarTablaReportes(grupos) {
         const gan = g.totalVentas - g.totalCosto;
         const mar = g.totalVentas > 0 ? ((gan/g.totalVentas)*100).toFixed(1) : 0;
         tr.innerHTML = `
-            <td><strong>${reporteState.tipo==='dia'?'📆 Día':'📅 Mes'}</strong></td>
+            <td><strong>${reporteState.tipo==='dia'?' Día':' Mes'}</strong></td>
             <td><strong>${g.fecha}</strong></td>
             <td style="text-align:center;">${g.cantidad} factura${g.cantidad!==1?'s':''}</td>
             <td style="text-align:right;color:var(--color-success);font-weight:bold;">$${formatearMoneda(g.totalVentas)}</td>
@@ -1183,7 +1183,7 @@ function verDetalleReporte(clave) {
     if (filtradas.length === 0) { mostrarNotificacion('No hay facturas en este período', 'info'); return; }
     const html = filtradas.map(f => `<tr><td>#${f.id}</td><td>${new Date(f.fecha_creacion||f.fecha).toLocaleDateString()}</td><td>${f.cliente_nombre||'Mostrador'}</td><td style="text-align:right;">$${formatearMoneda(f.total||0)}</td></tr>`).join('');
     mostrarModalPersonalizado({
-        titulo: `📋 Facturas de ${clave}`,
+        titulo: ` Facturas de ${clave}`,
         contenido: `<div style="max-height:400px;overflow-y:auto;"><table class="table-standard"><thead><tr><th># Factura</th><th>Fecha</th><th>Cliente</th><th>Total</th></tr></thead><tbody>${html}</tbody></table></div>`,
         botones: [{ texto: 'Cerrar', clase: 'btn-action', onClick: () => cerrarModalPersonalizado() }]
     });
@@ -1213,7 +1213,7 @@ function exportarReporteExcel() {
         csv += `"${reporteState.tipo==='dia'?'Día':'Mes'}","${g.fecha}",${g.cantidad},${g.totalVentas},${g.totalCosto},${gan},${g.totalVentas>0?((gan/g.totalVentas)*100).toFixed(1):0}%\n`;
     });
     _descargarCSV(csv, `reporte_${reporteState.tipo}_${new Date().toISOString().slice(0,10)}.csv`);
-    mostrarNotificacion('✅ Reporte exportado', 'success');
+    mostrarNotificacion(' Reporte exportado', 'success');
 }
 
 function renderizarTopVentas() {
@@ -1244,7 +1244,7 @@ function renderizarAlertasInventario() {
     cont.innerHTML = '';
     if (!AppState.inventario || AppState.inventario.length === 0) { cont.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">No hay productos en inventario</div>'; return; }
     const criticos = AppState.inventario.filter(p => (p.cantidad||0) <= stockMinimo || esProductoEstancado(p)).sort((a,b)=>(a.cantidad||0)-(b.cantidad||0));
-    if (criticos.length === 0) { cont.innerHTML = '<div style="text-align:center;padding:20px;color:#27ae60;">✅ Stock al día - No hay alertas</div>'; return; }
+    if (criticos.length === 0) { cont.innerHTML = '<div style="text-align:center;padding:20px;color:#27ae60;"> Stock al día - No hay alertas</div>'; return; }
     criticos.forEach(prod => _renderAlerta(prod, cont));
 }
 
@@ -1340,7 +1340,7 @@ function exportarInventarioExcel() {
         csv += `"${p.referencia||''}","${p.nombre||''}","${p.categoria||'General'}","${p.proveedor||''}","${p.ubicacion||''}",${p.precio_compra||0},${p.precio_venta||0},${cant},"${est}"\n`;
     });
     _descargarCSV(csv, `inventario_${new Date().toISOString().slice(0,10)}.csv`);
-    mostrarNotificacion(`✅ Exportados ${prods.length} productos`, 'success');
+    mostrarNotificacion(` Exportados ${prods.length} productos`, 'success');
 }
 
 function exportarTubosExcel() {
@@ -1353,7 +1353,7 @@ function exportarTubosExcel() {
         csv += `"${t.referencia||''}","${t.nombre||''}","${t.material||''}","${t.diametro||''}","${t.longitud||''}","${t.presion||''}","${t.proveedor||''}","${t.ubicacion||''}",${t.precio_compra||0},${t.precio_venta||0},${cant},"${est}"\n`;
     });
     _descargarCSV(csv, `tubos_${new Date().toISOString().slice(0,10)}.csv`);
-    mostrarNotificacion(`✅ Exportados ${tubos.length} tubos`, 'success');
+    mostrarNotificacion(` Exportados ${tubos.length} tubos`, 'success');
 }
 
 function _descargarCSV(contenido, nombre) {
@@ -1402,7 +1402,7 @@ function mostrarNotificacion(mensaje, tipo = 'info') {
 
 function mostrarConfirmacion(config) {
     mostrarModalPersonalizado({
-        titulo: '⚠️ Confirmación',
+        titulo: ' Confirmación',
         contenido: `<p style="text-align:center;font-size:1.1rem;">${config.mensaje}</p>`,
         botones: [
             { texto: 'Cancelar',   clase: 'btn-danger',  onClick: () => cerrarModalPersonalizado() },
@@ -1473,7 +1473,8 @@ document.addEventListener('DOMContentLoaded', inicializarAplicacion);
     'limpiarFiltrosReporte','verDetalleReporte'
 ].forEach(fn => { try { if (typeof eval(fn) === 'function') window[fn] = eval(fn); } catch(e){} });
 
-console.log('✅ FerreControl modo local cargado correctamente');
+console.log(' FerreControl modo local cargado correctamente');
 
 // Hecho Por:
-// Cristian Esteban Ruiz Parra Identificado con 1021673281
+// Cristian Esteban Ruiz Parra Identificado con 1021673281 --front end
+// Jim Alejandro Quinones Martinez identificado con 1022934378 --Back end
